@@ -2,7 +2,7 @@ package db
 
 import(
 	"fmt"
-	"database/sql"
+	"database/sql"  // ql包提供了保证SQL或类SQL数据库的泛用接口。使用sql包时必须注入（至少）一个数据库驱动。
 	mydb "file_server/db/mysql"
 )
 

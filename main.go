@@ -30,6 +30,9 @@ func main(){
 	http.HandleFunc("/file/update", handler.FileMetaUpdateHandler)
 	http.HandleFunc("/file/delete", handler.FileDeleteHandler)
 
+	// 增加用户注册功能的路由规则
+	http.HandleFunc("/user/signup", handler.SignupHandler)
+
 	err := http.ListenAndServe(":8080",nil) // 监听端口
 	if err != nil{ // 有错误返回错误信息
 		fmt.Printf("Failed to start server, err:%s", err.Error())
