@@ -12,7 +12,12 @@ import(
 func OnFileUploadFinished(filehash string, filename string, filesize int64, fileaddr string) bool {
 	stmt, err := mydb.DBConn().Prepare(
 		"insert ignore into tbl_file(`file_sha1`, `file_name`, `file_size`, `file_addr`, `status`) values(?,?,?,?,1)")
-	if err != nil{
+	/*
+		func (db *DB) Prepare(query string) (*Stmt, error)
+		Prepare创建一个准备好的状态用于之后的查询和命令。返回值可以同时执行多个查询和命令。
+	*/
+	
+		if err != nil{
 		fmt.Println("Failed to prepare statement, err:" + err.Error())
 		return false
 	}
