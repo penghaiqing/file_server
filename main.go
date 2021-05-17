@@ -32,6 +32,7 @@ func main(){
 
 	// 增加用户注册功能的路由规则
 	http.HandleFunc("/user/signup", handler.SignupHandler)
+	http.HandleFunc("/user/signin", handler.SignInHandler)
 
 	err := http.ListenAndServe(":8080",nil) // 监听端口
 	if err != nil{ // 有错误返回错误信息

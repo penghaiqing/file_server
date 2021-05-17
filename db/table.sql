@@ -32,3 +32,12 @@ create table `tbl_user` (
     unique key `idx_phone` (`phone`),
     key `idx_status` (`status`)  -- 为status 列建立索引
 )engine=innodb auto_increment=5 default charset=utf8mb4;
+
+// 创建 token表的结构，用于存放用户的token验证信息
+create table `tbl_user_token` (
+    `id` int(11) not null auto_increment,
+    `user_name` varchar(64) not null default '' comment '用户名',
+    `user_token` char(40) not null default '' comment '用户登录token',
+    primary key (`id`),
+    unique key `idx_username` (`user_name`)
+) engine=innodb default  charset=utf8mb4;

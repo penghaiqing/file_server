@@ -45,8 +45,10 @@ func UserSignup(username string, passwd string) bool {
 	}
 	return false
 }
-// UserSingin: 通过传入的用户名和加密密码 在数据库中进行比对判断是否合法
+
+// UserSingin: 判断密码是否一致 (通过传入的用户名和加密密码 在数据库中进行比对判断是否合法)
 func UserSingin(username string, encpwd string) bool {
+	fmt.Println("In UserSignin now! ")
 	stmt, err := mydb.DBConn().Prepare("select * from tbl_user where user_name=? limit 1")
 	if err != nil{
 		fmt.Println(err.Error())
@@ -90,4 +92,26 @@ func UserSingin(username string, encpwd string) bool {
 		fmt.Println("username not found: " + username)
 		return false
 	}
+	pRows := mydb.ParseRows(rows)  // 将读到的信息转换为map类型的数组
+	if len(pRows)>0 && string(pRows[0]["user_pwd"].([]byte))==encpwd { // .([]byte) 断言？
+		return true
+	}
+	return false
+}
+// UpdateToken: 刷新用户登录的 token信息
+func UpdateToken(username string, token string) bool {
+	stmt, err := mydb.DBConn().Prepare(
+	 "replace into tbl_user_token(`user_name`,`user_token`) values(?, ?)")
+	if err!=nil{
+		fmt.Println(err.Error())
+		return false
+	}
+	defer stmt.Close()
+
+	_, err = stmt.Exec(username, token)
+	if err != nil{
+		fmt.Println(err.Error())
+		return false
+	}
+	return true
 }
