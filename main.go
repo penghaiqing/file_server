@@ -30,9 +30,12 @@ func main(){
 	http.HandleFunc("/file/update", handler.FileMetaUpdateHandler)
 	http.HandleFunc("/file/delete", handler.FileDeleteHandler)
 
-	// 增加用户注册功能的路由规则
+	// 增加用户相关功能的路由规则
+	//http.HandleFunc("/", handler.SignInHandler)
 	http.HandleFunc("/user/signup", handler.SignupHandler)
 	http.HandleFunc("/user/signin", handler.SignInHandler)
+
+	http.HandleFunc("/user/info", handler.UserInfoHandler)
 
 	err := http.ListenAndServe(":8080",nil) // 监听端口
 	if err != nil{ // 有错误返回错误信息

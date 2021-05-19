@@ -46,8 +46,8 @@ func UserSignup(username string, passwd string) bool {
 	return false
 }
 
-// UserSingin: 判断密码是否一致 (通过传入的用户名和加密密码 在数据库中进行比对判断是否合法)
-func UserSingin(username string, encpwd string) bool {
+// UserSignin: 判断密码是否一致 (通过传入的用户名和加密密码 在数据库中进行比对判断是否合法)
+func UserSignin(username string, encpwd string) bool {
 	fmt.Println("In UserSignin now! ")
 	stmt, err := mydb.DBConn().Prepare("select * from tbl_user where user_name=? limit 1")
 	if err != nil{
@@ -114,4 +114,34 @@ func UpdateToken(username string, token string) bool {
 		return false
 	}
 	return true
+}
+
+// 为了方便存储 用户信息，建立 一个结构体
+type User struct{
+	Username string
+	Email string
+	Phone string
+	SignupAt string
+	LastActiveAt string
+	Status int
+}
+
+func GetUserInfo(username string) (User, error) {
+	user := User{}
+	stmt, err := mydb.DBConn().Prepare(
+		"select user_name, signup_at from tbl_user where user_name=? limit 1")
+	if err != nil{
+		fmt.Println(err.Error())
+		return user, err
+	}
+	defer stmt.Close()
+
+	// 执行查询操作
+	err = stmt.QueryRow(username).Scan(&user.Username, &user.SignupAt)
+	// QueryRow使用提供的参数执行准备好的查询状态。
+	// Scan将该行查询结果各列分别保存进dest参数指定的值中。如果该查询匹配多行，Scan会使用第一行结果并丢弃其余各行。
+	if err != nil{
+		return user, err
+	}
+	return user, nil
 }
