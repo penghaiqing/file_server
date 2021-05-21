@@ -1,7 +1,7 @@
 package handler
 
 import (
-	"io/ioutil"
+	 "io/ioutil"
 	"net/http"
 	"file_server/util"
 	dblayer "file_server/db"
@@ -17,13 +17,14 @@ const(
 func SignupHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodGet{
 		// 返回注册的html页面
-		data, err := ioutil.ReadFile("./static/view/signup.html")
-		if err != nil{
-			w.WriteHeader(http.StatusInternalServerError)
-			return
-		}
-		//io.WriteString(w, string(data)) // 读取文档成功后直接将数据返回
-		w.Write(data)
+		// data, err := ioutil.ReadFile("./static/view/signup.html")
+		// if err != nil{
+		// 	w.WriteHeader(http.StatusInternalServerError)
+		// 	return
+		// }
+		// //io.WriteString(w, string(data)) // 读取文档成功后直接将数据返回
+		// w.Write(data)
+		http.Redirect(w, r, "/static/view/signup.html", http.StatusFound)
 		return
 	}
 	
@@ -109,12 +110,13 @@ func UserInfoHandler(w http.ResponseWriter, r *http.Request)  {
 	// 1、解析请求参数
 	r.ParseForm()
 	username := r.Form.Get("username")
-	// token := r.Form.Get("token")
-	// // 2、验证token 是否有效, 定义一个函数去验证
-	// isValdiToken := IsTokenValid(token)
-	// if !isValdiToken{
-	// 	w.WriteHeader(http.StatusForbidden) // 返回403 错误码
-	// }
+	token := r.Form.Get("token")
+	// 2、验证token 是否有效, 定义一个函数去验证
+	isValidToken := IsTokenValid(token)
+	if !isValidToken{
+		w.WriteHeader(http.StatusForbidden) // 返回403 错误码
+		return
+	}
 	// 3、查询用户信息
 	// 此时应该在db的user.go 中增加查询的方法，在下面进行调用
 	user, err := dblayer.GetUserInfo(username)
@@ -143,7 +145,10 @@ func GenToken(username string) string {
 }
 // IsTokenValid: 判断 token 是否一致
 func IsTokenValid(token string) bool {
-	// todo: 判断token 的时效性，是否过期
+	if(len(token) != 40){
+		return false
+	}
+	// todo: 判断token 的时效性，是否过期，取token的后8位
 	// todo: 从数据库表tbl_user_token查询username对应的token信息
 	// todo：对比两个token是否一致
 	return true

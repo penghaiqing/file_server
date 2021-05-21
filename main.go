@@ -24,7 +24,7 @@ func main(){
 	ListenAndServe监听TCP地址addr，并且会使用handler参数调用Serve函数处理接收到的连接。
 	handler参数一般会设为nil，此时会使用DefaultServeMux。
 	*/
-	
+	//http.HandleFunc("/file/query", handler.FileQueryHandler)
 	http.HandleFunc("/file/download", handler.DownloadHandler)
 
 	http.HandleFunc("/file/update", handler.FileMetaUpdateHandler)
@@ -35,7 +35,7 @@ func main(){
 	http.HandleFunc("/user/signup", handler.SignupHandler)
 	http.HandleFunc("/user/signin", handler.SignInHandler)
 
-	http.HandleFunc("/user/info", handler.UserInfoHandler)
+	http.HandleFunc("/user/info", handler.HTTPInterceptor(handler.UserInfoHandler))
 
 	err := http.ListenAndServe(":8080",nil) // 监听端口
 	if err != nil{ // 有错误返回错误信息

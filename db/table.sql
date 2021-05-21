@@ -1,4 +1,4 @@
-// 文件表的建表语句
+-- 文件表的建表语句
 create table `tbl_file` (
     `id` int(11) not null auto_increment,
     `file_sha1` char(40) not null default '' comment '文件hash',
@@ -15,7 +15,7 @@ create table `tbl_file` (
     key `idx_status`(`status`)
 )engine=innodb default charset = utf8;
 
-// 加入用户信息后的用户表建表语句
+-- 加入用户信息后的用户表建表语句
 create table `tbl_user` (
     `id` int(11) not null auto_increment,
     `user_name` varchar(64) not null default '' comment '用户名',
@@ -33,7 +33,7 @@ create table `tbl_user` (
     key `idx_status` (`status`)  -- 为status 列建立索引
 )engine=innodb auto_increment=5 default charset=utf8mb4;
 
-// 创建 token表的结构，用于存放用户的token验证信息
+-- 创建 token表的结构，用于存放用户的token验证信息
 create table `tbl_user_token` (
     `id` int(11) not null auto_increment,
     `user_name` varchar(64) not null default '' comment '用户名',
@@ -41,3 +41,18 @@ create table `tbl_user_token` (
     primary key (`id`),
     unique key `idx_username` (`user_name`)
 ) engine=innodb default  charset=utf8mb4;
+
+-- 创建用户文件表
+create table `tbl_user_file`(
+    `id` int(11) not null primary key auto_increment,
+    `user_name` varchar(64) not null,
+    `file_sha1` varchar(64) not null default '' comment '文件hash',
+    `file_size` bigint(20) default '0' comment '文件大小',
+    `file_name` varchar(256) not null default '' comment '文件名',
+    `upload_at` datetime default current_timestamp comment '上传时间',
+    `last_update` datetime default current_timestamp on update current_timestamp comment '最后修改时间',
+    `status` int(11) not null default '0' comment '文件状态（0正常 1已删除 2禁用）',
+    unique key `idx_user_file` (`user_name`, `file_sha1`),
+    key `idx_status` (`status`),
+    key `idx_user_id` (`user_name`)
+)engine=innodb default charset=utf8mb4;
