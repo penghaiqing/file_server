@@ -17,7 +17,7 @@ func (a ByUploadTime) Swap(i, j int) {
 }
 
 func (a ByUploadTime) Less(i, j int) bool {
-	iTime := time.Parse(baseFormat, a[i].UploadAt)
-	jTime := time.Parse(baseFormat, a[j].UploadAt)
+	iTime,_ := time.Parse(baseFormat, a[i].UploadAt)
+	jTime,_ := time.Parse(baseFormat, a[j].UploadAt)
 	return iTime.UnixNano() > jTime.UnixNano()
 }

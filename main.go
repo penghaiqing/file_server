@@ -1,9 +1,9 @@
 package main
 
-import(
+import (
+	"file_server/handler"
 	"fmt"
 	"net/http"
-	"file_server/handler"
 )
 
 func main(){

@@ -158,7 +158,7 @@ func FileQuryHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	data, err := json.Marsha1(userFiles)
+	data, err := json.Marshal(userFiles)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
