@@ -36,15 +36,17 @@ func OnUserFileUploadFinished(username, filehash string, filename string, filesi
 // QueryUserFileMetas : 从数据库批量获取用户文件信息
 func QueryUserFileMetas(username string, limit int) ([]UserFile, error) {
 	stmt, err := mydb.DBConn().Prepare(
-		"select file_sha1, file_name, file_size, upload_at, last_update from" +
-			"tbl_user_file where user_name=? limit ?")
+		"select file_sha1, file_name, file_size, upload_at, last_update " +
+			"from tbl_user_file where user_name=? limit ?")
 	if err != nil {
+		fmt.Println("after prepare sql")
 		return nil, err
 	}
 	defer stmt.Close()
 
 	rows, err := stmt.Query(username, limit)
 	if err != nil {
+		fmt.Println("after query sql")
 		return nil, err
 	}
 

@@ -104,7 +104,8 @@ func UploadHandler(w http.ResponseWriter, r *http.Request) { // w: 向用户返�
 		suc := dblayer.OnUserFileUploadFinished(username, fileMeta.FileSha1,
 			fileMeta.FileName, fileMeta.FileSize)
 		if suc { // 更新成功
-			http.Redirect(w, r, "/file/upload/suc", http.StatusFound)
+			// http.Redirect(w, r, "/file/upload/suc", http.StatusFound)
+			http.Redirect(w, r, "/static/view/home.html", http.StatusFound)
 		} else {
 			w.Write([]byte("Upload Failed."))
 		}
@@ -146,21 +147,24 @@ func GetFileMetaHandler(w http.ResponseWriter, r *http.Request) {
 
 }
 
-// FileQuryHandler ：查询批量的文件元信息
-func FileQuryHandler(w http.ResponseWriter, r *http.Request) {
+// FileQueryHandler ：查询批量的文件元信息
+func FileQueryHandler(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 
 	limitCnt, _ := strconv.Atoi(r.Form.Get("limit"))
 	username := r.Form.Get("username")
+	fmt.Println("limitCnt = ", limitCnt)
 	//fileMetas, _ := meta.GetLastFileMetasDB(limitCnt)
 	userFiles, err := dblayer.QueryUserFileMetas(username, limitCnt)
 	if err != nil {
+		fmt.Println("after queryUserFilemetas")
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
 	data, err := json.Marshal(userFiles)
 	if err != nil {
+		fmt.Println("after json.Marshal")
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}

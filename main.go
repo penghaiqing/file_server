@@ -21,7 +21,7 @@ func main() {
 		ServeMux的文档解释了模式的匹配机制。
 	*/
 
-	//http.HandleFunc("/file/query", handler.FileQueryHandler)
+	http.HandleFunc("/file/query", handler.HTTPInterceptor(handler.FileQueryHandler))
 	http.HandleFunc("/file/download", handler.DownloadHandler)
 
 	http.HandleFunc("/file/update", handler.FileMetaUpdateHandler)
