@@ -121,6 +121,7 @@ func UserInfoHandler(w http.ResponseWriter, r *http.Request) {
 	username := r.Form.Get("username")
 	token := r.Form.Get("token")
 	// 2、验证token 是否有效, 定义一个函数去验证
+	// 之后已经设置了http的token验证过滤器，此处可以不进行token的验证
 	isValidToken := IsTokenValid(token)
 	if !isValidToken {
 		w.WriteHeader(http.StatusForbidden) // 返回403 错误码
@@ -133,7 +134,7 @@ func UserInfoHandler(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusForbidden)
 		return
 	}
-
+	fmt.Println("from tbl_user table sql is ", user)
 	// 4、组装并响应用户数据
 	resp := util.RespMsg{
 		Code: 0,

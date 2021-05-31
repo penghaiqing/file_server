@@ -31,8 +31,8 @@ func main() {
 	http.HandleFunc("/", handler.SignInHandler)
 	http.HandleFunc("/user/signup", handler.SignupHandler)
 	http.HandleFunc("/user/signin", handler.SignInHandler)
-
-	http.HandleFunc("/user/info", handler.HTTPInterceptor(handler.UserInfoHandler))
+	http.HandleFunc("/user/info", handler.UserInfoHandler)
+	//http.HandleFunc("/user/info", handler.HTTPInterceptor(handler.UserInfoHandler))
 
 	/*
 		func ListenAndServe
