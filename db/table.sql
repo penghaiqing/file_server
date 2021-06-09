@@ -29,7 +29,7 @@ create table `tbl_user` (
     `profile` text comment '用户属性',
     `status` int(11) not null default '0' comment '账户状态(启用/禁用/锁定/标记删除等)',
     primary key(`id`), -- 主键索引
-    unique key `idx_username` (`user_name`),
+    -- unique key `idx_username` (`user_name`), 
     key `idx_status` (`status`)  -- 为status 列建立索引
 )engine=innodb auto_increment=5 default charset=utf8mb4;
 

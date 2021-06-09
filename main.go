@@ -11,10 +11,10 @@ func main() {
 	http.Handle("/static/", http.StripPrefix("/static", http.FileServer(http.Dir("./static/"))))
 
 	// 路由规则
-	http.HandleFunc("/file/upload", handler.UploadHandler) // uplaod the files
-	http.HandleFunc("/file/upload/suc", handler.UploadSucHandler)
+	http.HandleFunc("/file/upload", handler.HTTPInterceptor(handler.UploadHandler)) // uplaod the files
+	http.HandleFunc("/file/upload/suc", handler.HTTPInterceptor(handler.UploadSucHandler))
 
-	http.HandleFunc("/file/meta", handler.GetFileMetaHandler)
+	http.HandleFunc("/file/meta", handler.HTTPInterceptor(handler.GetFileMetaHandler))
 	/*
 		func HandleFunc(pattern string, handler func(ResponseWriter, *Request))
 		HandleFunc注册一个处理器函数handler和对应的模式pattern（注册到DefaultServeMux）。
@@ -22,17 +22,18 @@ func main() {
 	*/
 
 	http.HandleFunc("/file/query", handler.HTTPInterceptor(handler.FileQueryHandler))
-	http.HandleFunc("/file/download", handler.DownloadHandler)
+	http.HandleFunc("/file/download", handler.HTTPInterceptor(handler.DownloadHandler))
 
-	http.HandleFunc("/file/update", handler.FileMetaUpdateHandler)
-	http.HandleFunc("/file/delete", handler.FileDeleteHandler)
+	http.HandleFunc("/file/update", handler.HTTPInterceptor(handler.FileMetaUpdateHandler))
+	http.HandleFunc("/file/delete", handler.HTTPInterceptor(handler.FileDeleteHandler))
+	http.HandleFunc("/file/fastupload", handler.HTTPInterceptor(handler.TryFastUploadHandler))
 
 	// 增加用户相关功能的路由规则
 	http.HandleFunc("/", handler.SignInHandler)
 	http.HandleFunc("/user/signup", handler.SignupHandler)
 	http.HandleFunc("/user/signin", handler.SignInHandler)
-	http.HandleFunc("/user/info", handler.UserInfoHandler)
-	//http.HandleFunc("/user/info", handler.HTTPInterceptor(handler.UserInfoHandler))
+	// http.HandleFunc("/user/info", handler.UserInfoHandler)
+	http.HandleFunc("/user/info", handler.HTTPInterceptor(handler.UserInfoHandler))
 
 	/*
 		func ListenAndServe
